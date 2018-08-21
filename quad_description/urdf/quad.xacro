@@ -66,6 +66,22 @@
 	  <child link="base_footprint" />
 	 </joint>
 
+	<!-- IMU -->
+	<link name="imu_link"/>
+	 <joint name="imu_joint" type="fixed">
+	  <origin xyz="${-wheelbase/2} 0 0" rpy="0 0 0" />
+	  <parent link="base_link" />
+	  <child link="imu_link" />
+	 </joint>
+
+        <!-- Camera -->
+        <link name="camera_link"/>
+         <joint name="camera_joint" type="fixed">
+          <origin xyz="0 0 0.2" rpy="0 0 0" />
+          <parent link="base_link" />
+          <child link="camera_link" />
+         </joint>
+
      <joint name="RL_wheel_joint" type="continuous" >
        <axis xyz="0 1 0" />
         <parent link="base_link" />
