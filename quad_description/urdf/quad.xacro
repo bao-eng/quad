@@ -3,7 +3,7 @@
 	xmlns:xacro="http://www.ros.org/wiki/xacro"
 	name="quad">
 	<xacro:include filename="$(find hector_sensors_description)/urdf/hokuyo_utm30lx.urdf.xacro"/>
-	<xacro:include filename="$(find hector_sensors_description)/urdf/generic_camera.urdf.xacro"/>
+	<!--xacro:include filename="$(find hector_sensors_description)/urdf/generic_camera.urdf.xacro"/-->
 
 	<!-- Physical Constant Macros -->
 	<xacro:property name="M_PI" value="3.1415926535897931" />
@@ -209,10 +209,10 @@
     
     <hokuyo_utm30lx_model name="hokuyo_laser" parent="base_link">
      <origin xyz="+0.222 0 0.003" rpy="0 0 0" />
-  	</hokuyo_utm30lx_model>
+    </hokuyo_utm30lx_model>
   	
-  	<generic_camera_model name="web_camera" parent="base_link">
+  	<!--generic_camera_model name="web_camera" parent="base_link">
      <origin xyz="0 0 0.01" rpy="0 0 0" />
-  	</generic_camera_model>
+  	</generic_camera_model-->
 
 </robot>

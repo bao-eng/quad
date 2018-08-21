@@ -1,0 +1,21 @@
+<launch>
+
+  <arg name="model" default="$(find quad_description)/urdf/quad.urdf"/>
+  <arg name="gui" default="true" />
+  <arg name="rvizconfig" default="$(find urdf_tutorial)/rviz/urdf.rviz" />
+
+  <param name="robot_description" command="$(find xacro)/xacro '$(find quad_description)/urdf/quad.xacro'" />
+  
+  <node name="urg_node" pkg="urg_node" type="urg_node"> 
+   <param name="ip_address" type="string" value="192.168.0.10"/>
+   <param name="frame_id" value="hokuyo_laser_frame"/>
+   <param name="min_ang" value="-1.41372"/>
+   <param name="max_ang" value="+1.41372"/>
+  </node>
+
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+  <!--node name="rviz" pkg="rviz" type="rviz" args="-d $(arg rvizconfig)" required="true" /-->
+
+</launch>
+
