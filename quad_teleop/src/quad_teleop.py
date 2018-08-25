@@ -3,6 +3,7 @@
 import rospy
 
 from sensor_msgs.msg import Joy
+from sensor_msgs.msg import JointState
 from ackermann_msgs.msg import AckermannDrive
 from std_msgs.msg import Float32
 
@@ -16,12 +17,17 @@ def callback(data):
     #ack_msg.steering_angle=90+data.axes[0]*50
     ack_msg.steering_angle=maprange( (-1, 1), (-100, 100), data.axes[0])
     ack_publisher.publish(ack_msg)
+    
+    steer_msg = JointState()
+    steer_msg.position =  maprange( (-1, 1), (-100, 100), data.axes[0])
+    steer_publisher.publish(steer_msg)
     #rospy.Publisher()
     #pub.publish([data.axes[0],0,0,0,0])
 if __name__ == '__main__':
     rospy.init_node("quad_teleop", anonymous=False)
     rospy.Subscriber("joy", Joy, callback)
     ack_publisher = rospy.Publisher('servo', AckermannDrive, queue_size=1)
+    steer_publisher = rospy.Publisher('steering', JointState, queue_size=1)
     while not rospy.is_shutdown():
         rospy.spin() 
    

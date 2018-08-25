@@ -1,0 +1,9 @@
+<launch>
+
+  <node name="joy" pkg="joy" type="joy_node" />
+    <param name ="joy_node/dev" value="/dev/input/js0" />
+  <node name="quad_teleop" pkg="quad_teleop" type="quad_teleop.py" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/toor/catkin_ws/src/quad.git/quad.rviz" />
+
+</launch>
+
