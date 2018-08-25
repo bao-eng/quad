@@ -14,7 +14,7 @@ def callback(data):
     #rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.axes[0])
     ack_msg = AckermannDrive()
     #ack_msg.steering_angle=90+data.axes[0]*50
-    ack_msg.steering_angle=maprange( (-1, 1), (0, 180), data.axes[0])
+    ack_msg.steering_angle=maprange( (-1, 1), (-100, 100), data.axes[0])
     ack_publisher.publish(ack_msg)
     #rospy.Publisher()
     #pub.publish([data.axes[0],0,0,0,0])
