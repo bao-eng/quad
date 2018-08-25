@@ -1,44 +1,27 @@
 #!/usr/bin/python
 
 import rospy
-import subprocess
 
 from sensor_msgs.msg import Joy
+from ackermann_msgs.msg import AckermannDrive
 from std_msgs.msg import Float32
 
-def main():
-    rospy.init_node("quad_teleop")
-    #controller = DriveTeleop()
-rospy.spin()
-
-
-import rospy
-from std_msgs.msg import String
-
-from sensor_msgs.msg import Joy
-from std_msgs.msg import Float32
+def maprange( a, b, s):
+    (a1, a2), (b1, b2) = a, b
+    return  b1 + ((s - a1) * (b2 - b1) / (a2 - a1))
 
 def callback(data):
-    rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.data)
-
-def listener():
-
-    # In ROS, nodes are uniquely named. If two nodes with the same
-    # name are launched, the previous one is kicked off. The
-    # anonymous=True flag means that rospy will choose a unique
-    # name for our 'listener' node so that multiple listeners can
-    # run simultaneously.
-    rospy.init_node('listener', anonymous=False)
-
-    #rospy.Subscriber('chatter', String, callback)
-    rospy.Subscriber("joy", Joy, callback)
-    pub = rospy.Publisher('chatter', String, queue_size=10)
-
-
-    # spin() simply keeps python from exiting until this node is stopped
-    rospy.spin()
-
+    #rospy.loginfo(rospy.get_caller_id() + 'I heard %s', data.axes[0])
+    ack_msg = AckermannDrive()
+    #ack_msg.steering_angle=90+data.axes[0]*50
+    ack_msg.steering_angle=maprange( (-1, 1), (0, 180), data.axes[0])
+    ack_publisher.publish(ack_msg)
+    #rospy.Publisher()
+    #pub.publish([data.axes[0],0,0,0,0])
 if __name__ == '__main__':
-    listener()
-
-
+    rospy.init_node("quad_teleop", anonymous=False)
+    rospy.Subscriber("joy", Joy, callback)
+    ack_publisher = rospy.Publisher('servo', AckermannDrive, queue_size=1)
+    while not rospy.is_shutdown():
+        rospy.spin() 
+   
