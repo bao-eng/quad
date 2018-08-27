@@ -5,8 +5,8 @@
     <!--param name="deadzone" value="0.12" /-->
   </node>
 
-  <node name="quad_teleop" pkg="quad_teleop" type="quad_teleop.py" />
-  <node name="rviz" pkg="rviz" type="rviz" args="-d /home/toor/catkin_ws/src/quad.git/quad.rviz" />
+  <node name="quad_teleop" pkg="quad_teleop" type="quad_teleop_steering.py" />
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_teleop)/rviz/quad.rviz" />
 
 </launch>
 
