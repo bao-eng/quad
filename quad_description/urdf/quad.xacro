@@ -2,7 +2,8 @@
 <robot
 	xmlns:xacro="http://www.ros.org/wiki/xacro"
 	name="quad">
-	<xacro:include filename="$(find hector_sensors_description)/urdf/hokuyo_utm30lx.urdf.xacro"/>
+	<!--  -->xacro:include filename="$(find hector_sensors_description)/urdf/hokuyo_utm30lx.urdf.xacro"/-->
+	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
 	<!--xacro:include filename="$(find hector_sensors_description)/urdf/generic_camera.urdf.xacro"/-->
 
 	<!-- Physical Constant Macros -->
@@ -42,6 +43,11 @@
 	<!-- base_link must have geometry so that its axes can be displayed in rviz. -->
   	<!-- Chassis -->
   	<link name="base_link">
+  	<inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
 	 <visual>
 	  <origin xyz="${-chassis_length/2} 0 0" rpy="0 0 0" />
 	  <geometry>
@@ -57,6 +63,9 @@
 	  </geometry>
      </collision>
     </link> 
+    <gazebo reference="base_link">
+      <material>Gazebo/Blue</material>
+    </gazebo>
     
 	<!-- Base footprint is on the ground under the robot -->
 	<link name="base_footprint"/>
@@ -90,6 +99,11 @@
      </joint>
     
     <link name="RL_wheel">
+    <inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
      <visual>
       <origin xyz="0 0 0" rpy="0 0 ${degrees_90}" />
       <geometry>
@@ -104,6 +118,9 @@
      </geometry>
     </collision>
     </link>
+    <gazebo reference="RL_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
     
     <joint name="RR_wheel_joint" type="continuous" >
         <axis xyz="0 1 0" />
@@ -113,6 +130,11 @@
     </joint>
     
     <link name="RR_wheel">
+    <inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	</inertial>
      <visual>
       <origin xyz="0 0 0" rpy="0 0 ${degrees_90}" />
       <geometry>
@@ -127,6 +149,9 @@
      </geometry>
     </collision>
     </link>
+    <gazebo reference="RR_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
     
     <joint name="FL_upright_joint" type="revolute" >
         <limit lower="-0.5" upper="0.5" effort="100" velocity="10" />
@@ -137,6 +162,11 @@
     </joint>
     
     <link name="FL_upright">
+    <inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
         <visual>
             <origin xyz="0 0 0" />
             <geometry>
@@ -160,6 +190,11 @@
     </joint>
     
     <link name="FL_wheel">
+    <inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
      <visual>
       <origin xyz="0 0 0" rpy="0 0 ${degrees_90}" />
       <geometry>
@@ -174,6 +209,9 @@
      </geometry>
     </collision>
     </link>
+    <gazebo reference="FL_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
     
     <joint name="FR_upright_joint" type="revolute" >
         <limit lower="-0.5" upper="0.5" effort="100" velocity="10" />
@@ -184,6 +222,11 @@
     </joint>
     
     <link name="FR_upright">
+    <inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
         <visual>
             <origin xyz="0 0 0" />
             <geometry>
@@ -207,6 +250,11 @@
     </joint>
     
     <link name="FR_wheel">
+    <inertial>
+          <mass value="0.270" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
      <visual>
       <origin xyz="0 0 0" rpy="0 0 ${degrees_90}" />
       <geometry>
@@ -221,11 +269,22 @@
      </geometry>
     </collision>
     </link>
+    <gazebo reference="FR_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
     
     
-    <hokuyo_utm30lx_model name="hokuyo_laser" parent="base_link">
+    <!--hokuyo_utm30lx_model name="hokuyo_laser" parent="base_link">
      <origin xyz="+0.222 0 0.003" rpy="0 0 0" />
-    </hokuyo_utm30lx_model>
+    </hokuyo_utm30lx_model-->
+    
+    <xacro:sensor_hokuyo_utm30lx prefix="hokuyo" parent="base_link">
+		<origin xyz="+0.222 0 0.003" rpy="0 0 0" />
+	</xacro:sensor_hokuyo_utm30lx >
+	
+	<xacro:sensor_gps prefix="gps" parent="base_link">
+		<origin xyz="-0.17 0 1.5" rpy="0 0 0"/>
+	</xacro:sensor_gps>
   	
   	<!--generic_camera_model name="web_camera" parent="base_link">
      <origin xyz="0 0 0.01" rpy="0 0 0" />
