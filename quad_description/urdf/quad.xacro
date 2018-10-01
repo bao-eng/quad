@@ -40,6 +40,12 @@
     	<color rgba="0 255 255 1.0"/>
     </material>
 	
+	<gazebo>
+  	 <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/quad</robotNamespace>
+  	 </plugin>
+	</gazebo>
+	
 	<!-- base_link must have geometry so that its axes can be displayed in rviz. -->
   	<!-- Chassis -->
   	<link name="base_link">
@@ -74,7 +80,8 @@
 	  <parent link="base_link" />
 	  <child link="base_footprint" />
 	 </joint>
-
+    
+    
 	<!-- IMU -->
 	<link name="imu_link"/>
 	 <joint name="imu_joint" type="fixed">
@@ -83,13 +90,13 @@
 	  <child link="imu_link" />
 	 </joint>
 
-        <!-- Camera -->
-        <link name="camera_link"/>
-         <joint name="camera_joint" type="fixed">
-          <origin xyz="0 0 0.2" rpy="0 0 0" />
-          <parent link="base_link" />
-          <child link="camera_link" />
-         </joint>
+    <!-- Camera -->
+    <link name="camera_link"/>
+     <joint name="camera_joint" type="fixed">
+      <origin xyz="0 0 0.2" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="camera_link" />
+     </joint>
 
      <joint name="RL_wheel_joint" type="continuous" >
        <axis xyz="0 1 0" />
@@ -273,17 +280,76 @@
       <material>Gazebo/Black</material>
     </gazebo>
     
+    <transmission name="FR_steering_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FR_upright_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FR_steering_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="FL_steering_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FL_upright_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FL_steering_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="RR_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="RR_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="RR_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="RL_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="RL_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="RL_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="FR_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FR_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FR_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="FL_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FL_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FL_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
     
     <!--hokuyo_utm30lx_model name="hokuyo_laser" parent="base_link">
      <origin xyz="+0.222 0 0.003" rpy="0 0 0" />
     </hokuyo_utm30lx_model-->
     
-    <xacro:sensor_hokuyo_utm30lx prefix="hokuyo" parent="base_link">
+    <xacro:sensor_hokuyo_utm30lx prefix="hokuyo" parent="base_link" min_angle="-1.57" max_angle="1.57">
 		<origin xyz="+0.222 0 0.003" rpy="0 0 0" />
 	</xacro:sensor_hokuyo_utm30lx >
 	
 	<xacro:sensor_gps prefix="gps" parent="base_link">
-		<origin xyz="-0.17 0 1.5" rpy="0 0 0"/>
+		<origin xyz="-0.15 0 0.5" rpy="0 0 0"/>
 	</xacro:sensor_gps>
   	
   	<!--generic_camera_model name="web_camera" parent="base_link">

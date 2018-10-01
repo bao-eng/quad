@@ -7,20 +7,35 @@ node [shape=box];
 "FR_wheel" [label="FR_wheel"];
 "RL_wheel" [label="RL_wheel"];
 "RR_wheel" [label="RR_wheel"];
-"hokuyo_laser_frame" [label="hokuyo_laser_frame"];
+"base_footprint" [label="base_footprint"];
+"camera_link" [label="camera_link"];
+"gps_base_link" [label="gps_base_link"];
+"hokuyo_base_link" [label="hokuyo_base_link"];
+"hokuyo_link" [label="hokuyo_link"];
+"imu_link" [label="imu_link"];
 node [shape=ellipse, color=blue, fontcolor=blue];
-"base_link" -> "FL_upright_joint" [label="xyz: 0 0.1525 0.173 \nrpy: 0 -0 0"]
+"base_link" -> "FL_upright_joint" [label="xyz: 0 0.1525 0 \nrpy: 0 -0 0"]
 "FL_upright_joint" -> "FL_upright"
 "FL_upright" -> "FL_wheel_joint" [label="xyz: 0 0.0725 0 \nrpy: 0 -0 0"]
 "FL_wheel_joint" -> "FL_wheel"
-"base_link" -> "FR_upright_joint" [label="xyz: 0 -0.1525 0.173 \nrpy: 0 -0 0"]
+"base_link" -> "FR_upright_joint" [label="xyz: 0 -0.1525 0 \nrpy: 0 -0 0"]
 "FR_upright_joint" -> "FR_upright"
 "FR_upright" -> "FR_wheel_joint" [label="xyz: 0 -0.0725 0 \nrpy: 0 -0 0"]
 "FR_wheel_joint" -> "FR_wheel"
-"base_link" -> "RL_wheel_joint" [label="xyz: -0.707 0.24 0.173 \nrpy: 0 -0 0"]
+"base_link" -> "RL_wheel_joint" [label="xyz: -0.707 0.24 0 \nrpy: 0 -0 0"]
 "RL_wheel_joint" -> "RL_wheel"
-"base_link" -> "RR_wheel_joint" [label="xyz: -0.707 -0.24 0.173 \nrpy: 0 -0 0"]
+"base_link" -> "RR_wheel_joint" [label="xyz: -0.707 -0.24 0 \nrpy: 0 -0 0"]
 "RR_wheel_joint" -> "RR_wheel"
-"base_link" -> "hokuyo_laser_joint" [label="xyz: 0.222 0 0.176 \nrpy: 0 -0 0"]
-"hokuyo_laser_joint" -> "hokuyo_laser_frame"
+"base_link" -> "base_footprint_joint" [label="xyz: -0.707 0 -0.173 \nrpy: 0 -0 0"]
+"base_footprint_joint" -> "base_footprint"
+"base_link" -> "camera_joint" [label="xyz: 0 0 0.2 \nrpy: 0 -0 0"]
+"camera_joint" -> "camera_link"
+"base_link" -> "gps_joint" [label="xyz: -0.15 0 0.5 \nrpy: 0 -0 0"]
+"gps_joint" -> "gps_base_link"
+"base_link" -> "hokuyo_base_joint" [label="xyz: 0.222 0 0.003 \nrpy: 0 -0 0"]
+"hokuyo_base_joint" -> "hokuyo_base_link"
+"hokuyo_base_link" -> "hokuyo_joint" [label="xyz: 0 0 0.055 \nrpy: 0 -0 0"]
+"hokuyo_joint" -> "hokuyo_link"
+"base_link" -> "imu_joint" [label="xyz: -0.3535 0 0 \nrpy: 0 -0 0"]
+"imu_joint" -> "imu_link"
 }

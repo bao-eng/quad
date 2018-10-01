@@ -1,0 +1,9 @@
+rbcar_robot_control:
+  model: rbcar
+  publish_odom_tf: true
+  frw_vel_topic: quad/right_front_axle_controller/command
+  flw_vel_topic: quad/left_front_axle_controller/command
+  blw_vel_topic: quad/left_rear_axle_controller/command
+  brw_vel_topic: quad/right_rear_axle_controller/command
+  frw_pos_topic: quad/right_steering_joint_controller/command
+  flw_pos_topic: quad/left_steering_joint_controller/command

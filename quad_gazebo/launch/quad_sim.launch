@@ -2,6 +2,11 @@
 <launch>
 
   <!-- roslaunch arguments -->
+  <env name="GAZEBO_MODEL_PATH" value="$(find quad_description)"/>
+  <env name="GAZEBO_RESOURCE_PATH" value="$(find quad_description)"/>
+  <arg name="namespace" default="quad"/>
+  <arg name="cmd_timeout" default="0.5"/>
+  
   <arg name="debug" default="false"/>
   <arg name="gui" default="true"/>
 
@@ -19,6 +24,9 @@
   -->
   <!-- include file="$(find rbcar_joystick)/launch/rbcar_joy.launch" / -->
 
+  <include file="$(find quad_gazebo)/launch/quad_control.launch"/>
+
+
   <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
     <arg name="world_name" value="$(find rbcar_gazebo)/worlds/rbcar.world"/>
@@ -35,10 +43,20 @@
          
   <!-- Call a python script to the run a service call to gazebo_ros to spawn a URDF robot -->
   <node name="urdf_spawner" pkg="gazebo_ros" type="spawn_model" respawn="false" output="screen"
-        args="-urdf -model rbcar -param robot_description -z 1"/>
+        args="-urdf -model rbcar -param robot_description -z 1"/>  
+
+  <!--node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/-->  
+  <!--node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" /-->      
+  <rosparam command="load" file="$(find quad_gazebo)/config/rbcar_robot_control.yaml"/>
+  <node name="rbcar_robot_control" pkg="rbcar_robot_control" type="rbcar_robot_control_node" output="screen">
+  	<remap from="joint_states" to="quad/joint_states"/>
+  </node>
   
-  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher"/>  
-  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />      
-   
+  <!--start twist to ackermannDrive converter for robot steering plugin -->
+  <node pkg="quad_description" name="twist_to_ackermannDrive" type="twist_to_ackermannDrive.py" args="twistToAckermannDrive:=rbcar_robot_control/command"/>
+  <!-- start rqt robot steering module -->
+  <node pkg="rqt_robot_steering" name="rqt_robot_steering" type="rqt_robot_steering"/>
+
+  <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_teleop)/rviz/quad.rviz" />
 
 </launch>
