@@ -46,6 +46,21 @@
   	 </plugin>
 	</gazebo>
 	
+	<link name="base_footprint">
+      <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+             <box size="0.001 0.001 0.001" />
+          </geometry>
+      </visual>
+    </link>
+	
+ 	<joint name="base_footprint_joint" type="fixed">
+      <origin xyz="${-wheelbase} 0 ${-wheelRadius}" rpy="0 0 0" />  <!-- height is the clearance -->
+      <parent link="base_footprint"/>
+      <child link="base_link" />
+    </joint>  
+	
 	<!-- base_link must have geometry so that its axes can be displayed in rviz. -->
   	<!-- Chassis -->
   	<link name="base_link">
@@ -74,12 +89,12 @@
     </gazebo>
     
 	<!-- Base footprint is on the ground under the robot -->
-	<link name="base_footprint"/>
+	<!--link name="base_footprint"/>
 	 <joint name="base_footprint_joint" type="fixed">
 	  <origin xyz="${-wheelbase} 0 ${-wheelRadius}" rpy="0 0 0" />
 	  <parent link="base_link" />
 	  <child link="base_footprint" />
-	 </joint>
+	 </joint-->
     
     
 	<!-- IMU -->

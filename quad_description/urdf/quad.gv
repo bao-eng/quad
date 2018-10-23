@@ -1,5 +1,6 @@
 digraph G {
 node [shape=box];
+"base_footprint" [label="base_footprint"];
 "base_link" [label="base_link"];
 "FL_upright" [label="FL_upright"];
 "FL_wheel" [label="FL_wheel"];
@@ -7,13 +8,14 @@ node [shape=box];
 "FR_wheel" [label="FR_wheel"];
 "RL_wheel" [label="RL_wheel"];
 "RR_wheel" [label="RR_wheel"];
-"base_footprint" [label="base_footprint"];
 "camera_link" [label="camera_link"];
 "gps_base_link" [label="gps_base_link"];
 "hokuyo_base_link" [label="hokuyo_base_link"];
 "hokuyo_link" [label="hokuyo_link"];
 "imu_link" [label="imu_link"];
 node [shape=ellipse, color=blue, fontcolor=blue];
+"base_footprint" -> "base_footprint_joint" [label="xyz: -0.707 0 -0.173 \nrpy: 0 -0 0"]
+"base_footprint_joint" -> "base_link"
 "base_link" -> "FL_upright_joint" [label="xyz: 0 0.1525 0 \nrpy: 0 -0 0"]
 "FL_upright_joint" -> "FL_upright"
 "FL_upright" -> "FL_wheel_joint" [label="xyz: 0 0.0725 0 \nrpy: 0 -0 0"]
@@ -26,8 +28,6 @@ node [shape=ellipse, color=blue, fontcolor=blue];
 "RL_wheel_joint" -> "RL_wheel"
 "base_link" -> "RR_wheel_joint" [label="xyz: -0.707 -0.24 0 \nrpy: 0 -0 0"]
 "RR_wheel_joint" -> "RR_wheel"
-"base_link" -> "base_footprint_joint" [label="xyz: -0.707 0 -0.173 \nrpy: 0 -0 0"]
-"base_footprint_joint" -> "base_footprint"
 "base_link" -> "camera_joint" [label="xyz: 0 0 0.2 \nrpy: 0 -0 0"]
 "camera_joint" -> "camera_link"
 "base_link" -> "gps_joint" [label="xyz: -0.15 0 0.5 \nrpy: 0 -0 0"]
