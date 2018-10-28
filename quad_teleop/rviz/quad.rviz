@@ -5,7 +5,11 @@ Panels:
     Property Tree Widget:
       Expanded:
         - /Global Options1
-        - /Map1
+        - /LaserScan1
+        - /RobotModel1
+        - /RobotModel1/Links1
+        - /RobotModel1/Links1/base_footprint1
+        - /RobotModel1/Links1/base_link1
       Splitter Ratio: 0.5
     Tree Height: 440
   - Class: rviz/Selection
@@ -65,13 +69,13 @@ Visualization Manager:
       Max Color: 255; 255; 255
       Max Intensity: 999999
       Min Color: 0; 0; 0
-      Min Intensity: 4.65500638e-29
+      Min Intensity: 0
       Name: LaserScan
       Position Transformer: XYZ
       Queue Size: 10
       Selectable: true
       Size (Pixels): 3
-      Size (m): 0.00999999978
+      Size (m): 0.0500000007
       Style: Flat Squares
       Topic: /front_laser/scan
       Unreliable: false
@@ -120,14 +124,13 @@ Visualization Manager:
           Value: true
         base_footprint:
           Alpha: 1
-          Show Axes: false
+          Show Axes: true
           Show Trail: false
           Value: true
         base_link:
           Alpha: 1
-          Show Axes: false
+          Show Axes: true
           Show Trail: false
-          Value: true
         camera_link:
           Alpha: 1
           Show Axes: false
@@ -230,21 +233,26 @@ Visualization Manager:
   Value: true
   Views:
     Current:
-      Angle: -1.59499931
-      Class: rviz/TopDownOrtho
+      Class: rviz/Orbit
+      Distance: 3.04735208
       Enable Stereo Rendering:
         Stereo Eye Separation: 0.0599999987
         Stereo Focal Distance: 1
         Swap Stereo Eyes: false
         Value: false
+      Focal Point:
+        X: -0.546720684
+        Y: -0.0650789961
+        Z: 0.443651944
+      Focal Shape Fixed Size: false
+      Focal Shape Size: 0.0500000007
       Invert Z Axis: false
       Name: Current View
       Near Clip Distance: 0.00999999978
-      Scale: 123.336121
+      Pitch: 0.540398479
       Target Frame: <Fixed Frame>
-      Value: TopDownOrtho (rviz)
-      X: 0.619046509
-      Y: -0.39639312
+      Value: Orbit (rviz)
+      Yaw: 2.1553998
     Saved: ~
 Window Geometry:
   Camera:

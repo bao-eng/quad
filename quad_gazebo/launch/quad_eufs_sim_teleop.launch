@@ -10,9 +10,16 @@
   <arg name="cmd_timeout" default="0.5"/>
   
   <!-- Vehicle pose -->
-  <arg name="x" default="-15.0"/>
+  <!--arg name="x" default="-15.0"/>
   <arg name="y" default="14.4"/>
-  <arg name="z" default="0.1"/>
+  <arg name="z" default="0.5"/>
+  <arg name="roll" default="0.0"/>
+  <arg name="pitch" default="0.0"/>
+  <arg name="yaw" default="0.0"/-->
+
+  <arg name="x" default="0"/>
+  <arg name="y" default="0"/>
+  <arg name="z" default="0.5"/>
   <arg name="roll" default="0.0"/>
   <arg name="pitch" default="0.0"/>
   <arg name="yaw" default="0.0"/>
@@ -22,7 +29,8 @@
 
   <!-- Gazebo -->
   <include file="$(find gazebo_ros)/launch/empty_world.launch">
-        <arg name="world_name" value="$(find eufs_gazebo)/worlds/small_track.world"/>
+    <!--arg name="world_name" value="$(find eufs_gazebo)/worlds/small_track.world"/-->
+    <arg name="world_name" value="$(find quad_gazebo)/worlds/wall.world"/>
     <arg name="debug" value="$(arg debug)"/>
     <arg name="gui" value="$(arg gui)"/>
     <arg name="paused" value="false"/>
@@ -31,7 +39,7 @@
   </include>
 
   <!-- Load the URDF into the ROS Parameter Server -->  
-  <param command="$(find xacro)/xacro '$(find quad_description)/urdf/quad.xacro' --inorder" name="robot_description"/>
+  <param command="$(find xacro)/xacro '$(find quad_description)/urdf/quad_low.xacro' --inorder" name="robot_description"/>
 
   <!-- Call a python script to the run a service call to gazebo_ros to spawn a URDF robot -->
   <node args="-urdf -model quad -param robot_description 
@@ -42,7 +50,7 @@
   <include file="$(find quad_gazebo)/launch/robot_control_quad.launch"/>
 
   <node respawn="false" pkg="joy" type="joy_node" name="joy" >
-   <param name="dev" type="string" value="/dev/input/js1" />
+   <param name="dev" type="string" value="/dev/input/js0" />
    <!--param name="deadzone" value="0.12" /-->
   </node>
 
@@ -50,7 +58,7 @@
   
   <node name="rviz" pkg="rviz" type="rviz" args="-d $(find quad_teleop)/rviz/quad.rviz" />
 
-
+  <!--include file="$(find quad_gazebo)/launch/hector_mapping_tutorial.launch"/-->
 
   <!-- Python script to republish ground truth -->
   <!--node 

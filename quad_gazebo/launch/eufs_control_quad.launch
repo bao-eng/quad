@@ -8,6 +8,8 @@
 					  right_steering_joint_controller
 					  left_rear_axle_controller
 					  right_rear_axle_controller
+					  left_front_axle_controller
+					  right_front_axle_controller
 					  joint_read_state_controller
                       "/>
 
