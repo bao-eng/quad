@@ -1,0 +1,365 @@
+<?xml version="1.0"?>
+<robot
+	xmlns:xacro="http://www.ros.org/wiki/xacro"
+	name="quad">
+	<!--  -->xacro:include filename="$(find hector_sensors_description)/urdf/hokuyo_utm30lx.urdf.xacro"/-->
+	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+	<!--xacro:include filename="$(find hector_sensors_description)/urdf/generic_camera.urdf.xacro"/-->
+
+	<!-- Physical Constant Macros -->
+	<xacro:property name="M_PI" value="3.1415926535897931" />
+
+	<!-- Dimension Macros -->
+	<xacro:property name="degrees_45" value="0.785398163"/>
+    <xacro:property name="degrees_90" value="1.57079633"/>
+	
+	<xacro:property name="chassis_length" value="0.707"/>
+    <xacro:property name="chassis_width" value="0.05"/>
+    <xacro:property name="chassis_height" value="0.05"/>
+	<xacro:property name="wheelbase" value="0.707" />
+	<xacro:property name="fronttrack" value="0.15" />
+	<xacro:property name="reartrack" value="0.48" />
+	<!--xacro:property name="carHeight" value="0.1" />-->
+	<xacro:property name="wheelRadius" value="0.173" />
+	<xacro:property name="wheelWidth" value="0.122" />
+    
+	<!-- Physical Material Macros -->
+	<material name="Red">
+    	<color rgba="1.0 0 0 1.0"/>
+    </material>
+    <material name="Green">
+    	<color rgba="0 1.0 0 1.0"/>
+    </material>
+    <material name="Blue">
+    	<color rgba="0 0 1.0 0.5"/>
+    </material>
+    <material name="Black">
+    	<color rgba="0 0 0 1.0"/>
+    </material>
+    <material name="Aqua">
+    	<color rgba="0 255 255 1.0"/>
+    </material>
+	
+	<gazebo>
+  	 <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/quad</robotNamespace>
+  	 </plugin>
+	</gazebo>
+	
+	<link name="base_footprint">
+      <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+             <box size="0.001 0.001 0.001" />
+          </geometry>
+      </visual>
+    </link>
+	
+ 	<joint name="base_footprint_joint" type="fixed">
+      <origin xyz="0 0 ${wheelRadius}" rpy="0 0 0" />  <!-- height is the clearance -->
+      <parent link="base_footprint"/>
+      <child link="base_link" />
+    </joint>  
+	
+	<!-- base_link must have geometry so that its axes can be displayed in rviz. -->
+  	<!-- Chassis -->
+  	<link name="base_link">
+  	<inertial>
+          <mass value="30" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="0.01" ixy="0" ixz="0" iyy="1.26" iyz="0" izz="1.26" />
+	 </inertial>
+	 <visual>
+	  <origin xyz="0 0 0" rpy="0 0 0" />
+	  <geometry>
+	   <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+	  </geometry>
+	  <material name="Blue"/>
+     </visual>
+
+     <collision>
+	  <origin xyz="0 0 0" rpy="0 0 0" />
+	  <geometry>
+	   <box size="${chassis_length} ${chassis_width} ${chassis_height}"/>
+	  </geometry>
+     </collision>
+    </link> 
+    <gazebo reference="base_link">
+      <material>Gazebo/Blue</material>
+    </gazebo>
+    
+	<!-- IMU -->
+	<link name="imu_link"/>
+	 <joint name="imu_joint" type="fixed">
+	  <origin xyz="0 0 0.1" rpy="0 0 0" />
+	  <parent link="base_link" />
+	  <child link="imu_link" />
+	 </joint>
+
+    <!-- Camera -->
+    <link name="camera_link"/>
+     <joint name="camera_joint" type="fixed">
+      <origin xyz="${wheelbase/2} 0 0.3" rpy="0 0 0" />
+      <parent link="base_link" />
+      <child link="camera_link" />
+     </joint>
+
+     <joint name="RL_wheel_joint" type="continuous" >
+       <axis xyz="0 1 0" />
+        <parent link="base_link" />
+        <child link="RL_wheel" />
+        <origin xyz="${-wheelbase/2} ${reartrack/2} 0" rpy="0 0 0" />
+     </joint>
+    
+    <link name="RL_wheel">
+    <inertial>
+          <mass value="4" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="0.04" ixy="0" ixz="0" iyy="0.07" iyz="0" izz="0.04" />
+	 </inertial>
+     <visual>
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+       <geometry>
+        <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+       </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+	 <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+     <geometry>
+      <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+     </geometry>
+    </collision>
+    </link>
+    <gazebo reference="RL_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
+    
+    <joint name="RR_wheel_joint" type="continuous" >
+        <axis xyz="0 1 0" />
+        <parent link="base_link" />
+        <child link="RR_wheel" />
+        <origin xyz="${-wheelbase/2} ${-reartrack/2} 0" rpy="0 0 0" />
+    </joint>
+    
+    <link name="RR_wheel">
+    <inertial>
+          <mass value="4" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="0.04" ixy="0" ixz="0" iyy="0.07" iyz="0" izz="0.04" />
+	</inertial>
+     <visual>
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+       <geometry>
+        <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+       </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+     <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+     <geometry>
+      <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+     </geometry>
+    </collision>
+    </link>
+    <gazebo reference="RR_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
+    
+    <joint name="FL_upright_joint" type="revolute" >
+        <limit lower="-0.5" upper="0.5" effort="100" velocity="10" />
+        <axis xyz="0 0 1" />
+        <parent link="base_link" />
+        <child link="FL_upright" />
+        <origin xyz="${wheelbase/2} ${0.305/2} 0" rpy="0 0 0" />
+    </joint>
+    
+    <link name="FL_upright">
+    <inertial>
+          <mass value="0.1" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
+        <visual>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <box size="0.1 0.05 0.15" />
+            </geometry>
+            <material name="Green"/>
+        </visual>
+        <!--collision>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <box size="0.1 0.05 0.15" />
+            </geometry>
+        </collision-->
+    </link>
+    
+    <joint name="FL_wheel_joint" type="continuous" >
+        <axis xyz="0 1 0" />
+        <parent link="FL_upright" />
+        <child link="FL_wheel" />
+        <origin xyz="0 0.0725 0" rpy="0 0 0" />
+    </joint>
+    
+    <link name="FL_wheel">
+    <inertial>
+          <mass value="4" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="0.04" ixy="0" ixz="0" iyy="0.07" iyz="0" izz="0.04" />
+	 </inertial>
+     <visual>
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+	   <geometry>
+        <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+       </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+     <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+     <geometry>
+      <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+     </geometry>
+    </collision>
+    </link>
+    <gazebo reference="FL_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
+    
+    <joint name="FR_upright_joint" type="revolute" >
+        <limit lower="-0.5" upper="0.5" effort="100" velocity="10" />
+        <axis xyz="0 0 1" />
+        <parent link="base_link" />
+        <child link="FR_upright" />
+        <origin xyz="${wheelbase/2} ${-0.305/2} 0" rpy="0 0 0" />
+    </joint>
+    
+    <link name="FR_upright">
+    <inertial>
+          <mass value="0.1" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="2.632e-4" ixy="0" ixz="0" iyy="2.632e-4" iyz="0" izz="1.62e-4" />
+	 </inertial>
+        <visual>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <box size="0.1 0.05 0.15" />
+            </geometry>
+            <material name="Green"/>
+        </visual>
+        <!--collision>
+            <origin xyz="0 0 0" />
+            <geometry>
+                <box size="0.1 0.05 0.15" />
+            </geometry>
+        </collision-->
+    </link>
+    
+    <joint name="FR_wheel_joint" type="continuous" >
+        <axis xyz="0 1 0" />
+        <parent link="FR_upright" />
+        <child link="FR_wheel" />
+        <origin xyz="0 -0.0725 0" rpy="0 0 0" />
+    </joint>
+    
+    <link name="FR_wheel">
+    <inertial>
+          <mass value="4" />
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <inertia ixx="0.04" ixy="0" ixz="0" iyy="0.07" iyz="0" izz="0.04" />
+	 </inertial>
+     <visual>
+      <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+	   <geometry>
+        <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+       </geometry>
+      <material name="Black"/>
+    </visual>
+    <collision>
+     <origin xyz="0 0 0" rpy="${degrees_90} 0 0" />
+     <geometry>
+      <cylinder radius="${wheelRadius}" length="${wheelWidth}"/>
+     </geometry>
+    </collision>
+    </link>
+    <gazebo reference="FR_wheel">
+      <material>Gazebo/Black</material>
+    </gazebo>
+    
+    <transmission name="FR_steering_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FR_upright_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FR_steering_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="FL_steering_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FL_upright_joint">
+      <hardwareInterface>hardware_interface/EffortJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FL_steering_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="RR_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="RR_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="RR_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="RL_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="RL_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="RL_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="FR_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FR_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FR_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <transmission name="FL_wheel_axle_trans">
+     <type>transmission_interface/SimpleTransmission</type>
+     <joint name="FL_wheel_joint">
+      <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+     </joint>
+     <actuator name="FL_wheel_axle_act">
+      <mechanicalReduction>1</mechanicalReduction>
+     </actuator>
+    </transmission>
+    
+    <!--hokuyo_utm30lx_model name="hokuyo_laser" parent="base_link">
+     <origin xyz="+0.222 0 0.003" rpy="0 0 0" />
+    </hokuyo_utm30lx_model-->
+    
+    <xacro:sensor_hokuyo_utm30lx prefix="hokuyo" parent="base_link" min_angle="-1.57" max_angle="1.57">
+		<origin xyz="${(wheelbase/2)+0.222} 0 0.003" rpy="0 0 0" />
+	</xacro:sensor_hokuyo_utm30lx >
+	
+	<xacro:sensor_gps prefix="gps" parent="base_link">
+		<origin xyz="0 0 0.3" rpy="0 0 0"/>
+	</xacro:sensor_gps>
+  	
+  	<!--generic_camera_model name="web_camera" parent="base_link">
+     <origin xyz="0 0 0.01" rpy="0 0 0" />
+  	</generic_camera_model-->
+
+</robot>
