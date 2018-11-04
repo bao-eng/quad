@@ -4,6 +4,7 @@
 	name="quad">
 	<!--  -->xacro:include filename="$(find hector_sensors_description)/urdf/hokuyo_utm30lx.urdf.xacro"/-->
 	<xacro:include filename="$(find robotnik_sensors)/urdf/all_sensors.urdf.xacro" />
+	<xacro:include filename="$(find quad_description)/urdf/axis_m5014.urdf.xacro" />
 	<!--xacro:include filename="$(find hector_sensors_description)/urdf/generic_camera.urdf.xacro"/-->
 
 	<!-- Physical Constant Macros -->
@@ -88,13 +89,24 @@
       <material>Gazebo/Blue</material>
     </gazebo>
     
-	<!-- IMU -->
-	<link name="imu_link"/>
-	 <joint name="imu_joint" type="fixed">
+	<!-- IMU -->	
+	<!--joint name="imu_joint" type="fixed">
 	  <origin xyz="0 0 0.1" rpy="0 0 0" />
 	  <parent link="base_link" />
 	  <child link="imu_link" />
-	 </joint>
+	</joint>
+	
+	<link name="imu_link">
+	 <visual>
+          <origin xyz="0 0 0" rpy="0 0 0" />
+          <geometry>
+             <box size="0.001 0.001 0.001" />
+          </geometry>
+      </visual>
+    </link>
+    <gazebo reference="imu_link">
+      <material>Gazebo/Red</material>
+    </gazebo--> 
 
     <!-- Camera -->
     <link name="camera_link"/>
@@ -354,9 +366,47 @@
 		<origin xyz="${(wheelbase/2)+0.222} 0 0.003" rpy="0 0 0" />
 	</xacro:sensor_hokuyo_utm30lx >
 	
+	<xacro:sensor_imu_hector prefix="stim300" parent="base_link">
+		<origin xyz="0 0 0.1" rpy="0 0 0" />
+	</xacro:sensor_imu_hector >
+	
+	<xacro:sensor_axis_m5014 prefix="axis_m5014" parent="base_link">
+		<origin xyz="${(wheelbase/2)+0.1} 0 0.25" rpy="0 ${degrees_90} 0" />
+	</xacro:sensor_axis_m5014 > 
+	
 	<xacro:sensor_gps prefix="gps" parent="base_link">
 		<origin xyz="0 0 0.3" rpy="0 0 0"/>
 	</xacro:sensor_gps>
+  	
+    <!--gazebo>
+    <plugin name="imu_plugin" filename="libgazebo_ros_imu.so">
+      <alwaysOn>true</alwaysOn>
+      <bodyName>imu_link</bodyName>
+      <topicName>imu</topicName>
+      <serviceName>imu_service</serviceName>
+      <gaussianNoise>0.0</gaussianNoise>
+      <updateRate>20.0</updateRate>
+    </plugin>
+    </gazebo-->
+  	<!--gazebo reference="imu_link">
+    <gravity>true</gravity>
+    <sensor name="imu_sensor" type="imu">
+      <always_on>true</always_on>
+      <update_rate>100</update_rate>
+      <visualize>true</visualize>
+      <topic>__default_topic__</topic>
+      <plugin filename="libgazebo_ros_imu_sensor.so" name="imu_plugin">
+        <topicName>imu</topicName>
+        <bodyName>imu_link</bodyName>
+        <updateRateHZ>10.0</updateRateHZ>
+        <gaussianNoise>0.0</gaussianNoise>
+        <xyzOffset>0 0 0</xyzOffset>
+        <rpyOffset>0 0 0</rpyOffset>
+        <frameName>imu_link</frameName>
+      </plugin>
+      <pose>0 0 0 0 0 0</pose>
+    </sensor>
+    </gazebo-->
   	
   	<!--generic_camera_model name="web_camera" parent="base_link">
      <origin xyz="0 0 0.01" rpy="0 0 0" />
