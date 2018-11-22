@@ -1,0 +1,3 @@
+<launch>
+  <node pkg="quad_gazebo" name="opencv_bridge" type="opencv_quad.py"/>
+</launch>
